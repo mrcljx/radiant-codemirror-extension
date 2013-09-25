@@ -22,6 +22,8 @@
 			var value = filterSelect.value.toLowerCase()
 			if (value == "markdown") {
 				return "markdown";
+			} else if (value == "haml") {
+				return "haml";
 			} else if (value == "") {
 				return "htmlmixed";
 			}
