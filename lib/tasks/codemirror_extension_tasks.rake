@@ -18,13 +18,18 @@ namespace :radiant do
       task :update => :environment do
         is_svn_or_dir = proc {|path| path =~ /\.svn/ || File.directory?(path) }
         puts "Copying assets from CodemirrorExtension"
+        
         Dir[CodemirrorExtension.root + "/public/**/*"].reject(&is_svn_or_dir).each do |file|
           path = file.sub(CodemirrorExtension.root, '')
           directory = File.dirname(path)
           mkdir_p RAILS_ROOT + directory, :verbose => false
           
           if CodemirrorExtension.root.starts_with? RAILS_ROOT
-            ln_sf file, RAILS_ROOT + path, :verbose => false
+            require 'pathname'
+            src_path = file
+            dest_path = RAILS_ROOT + path
+            rel_path = Pathname.new(src_path).relative_path_from(Pathname.new(dest_path).dirname).to_s
+            ln_sf rel_path, dest_path, :verbose => false
           else
             cp file, RAILS_ROOT + path, :verbose => false
           end
