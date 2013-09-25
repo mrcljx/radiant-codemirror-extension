@@ -1,0 +1,16 @@
+PATH
+  remote: .
+  specs:
+    radiant-codemirror-extension (1.0.0)
+
+GEM
+  remote: https://www.rubygems.org/
+  specs:
+    rake (10.1.0)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  radiant-codemirror-extension!
+  rake (~> 10.1.0)
