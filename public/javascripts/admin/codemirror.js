@@ -138,5 +138,12 @@
 		setTimeout(watchElements, 50);
 	  setInterval(watchElements, 500);
 		setInterval(watchVisible, 50);
+		
+		var previewPanel = $('preview_panel');
+		
+		if (previewPanel) {
+			// otherwise the editor is visible when preview is active
+			previewPanel.style.zIndex = 200;
+		}
 	});
 })();
