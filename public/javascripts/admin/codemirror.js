@@ -74,24 +74,6 @@
         tabSize: 2,
         lineNumbers: true
       });
-			
-			var part = element.up(".part");
-			
-			if (part) {
-				var filterSelect = part.down('select[id$=\"filter_id\"]');
-			
-				if (filterSelect) {
-					filterSelect.observe("change", function() {
-						var mode = "text/html";
-				
-						if (filterSelect.value == "Markdown") {
-							mode = "text/css";
-						}
-				
-						editor.setOption("mode", mode);
-					});
-				}
-			}
 		
 			var button = new Element("button");
 			button.innerText = "Format selection";
