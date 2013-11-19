@@ -86,9 +86,10 @@
 		};
 	
 		handle.observe('mousedown', function(event) {
-			 updateMovePosition(event);
-			 Event.observe(document.body, 'mouseup', upListener);
-			 Event.observe(document.body, 'mousemove', moveListener);
+			event.preventDefault()
+			updateMovePosition(event);
+			Event.observe(document.body, 'mouseup', upListener);
+			Event.observe(document.body, 'mousemove', moveListener);
 		});
 	}
 	
