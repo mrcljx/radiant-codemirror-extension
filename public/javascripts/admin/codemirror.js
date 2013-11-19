@@ -1,9 +1,9 @@
 (function() {
-  function isVisible(node) {
-      return node.visible() && node.ancestors().all(function(item) {
-          return item.visible()
-      });
-  }
+	function isVisible(node) {
+			return node.visible() && node.ancestors().all(function(item) {
+					return item.visible()
+			});
+	}
 	
 	var elements = [];
 	
@@ -60,38 +60,38 @@
 	
 	function handleResizing(editorNode, handle) {
 		editorNode.movePosition = null;
-
+	
 		function updateMovePosition(event) {
 			editorNode.movePosition = {
 				x:event.pointerX(),
 				y:event.pointerY()
 			};
 		}
-
+	
 		function moveListener(event) {
 			var delta = {
 				x: event.pointerX() - editorNode.movePosition.x,
 				y: event.pointerY() - editorNode.movePosition.y
 			};
-
+	
 			updateMovePosition(event);
 			var size = Element.getDimensions(editorNode);
 			editorNode.style.height = "" + Math.max(100, size.height + delta.y) + "px";
 		}
-
+	
 		function upListener(event) {
 			Event.stopObserving(document.body, 'mousemove', moveListener);
 			var size = Element.getDimensions(editorNode);
 			editorNode.CodeMirror.setSize(size.width, size.height);
 		};
-
+	
 		handle.observe('mousedown', function(event) {
 			 updateMovePosition(event);
 			 Event.observe(document.body, 'mouseup', upListener);
 			 Event.observe(document.body, 'mousemove', moveListener);
 		});
 	}
-
+	
 	function makeResizable(editorNode) {
 		var resizer = new Element("div");
 		resizer.style.height = "5px";
@@ -100,16 +100,16 @@
 		editorNode.insert({ after: resizer });
 		handleResizing(editorNode, resizer);
 	}
-
+	
 	function watchVisible() {
 		var toRemove = [];
 		
 		elements.each(function(element) {
-      if (!isVisible(element)) {
-        return;
-      }
+			if (!isVisible(element)) {
+				return;
+			}
 			
-      element._codemirror = true; // don't retry
+			element._codemirror = true; // don't retry
 			toRemove.push(element);
 			var editor = element._codemirror = CodeMirror.fromTextArea(element, {
 				mode: guessInitialMode(element),
@@ -119,7 +119,7 @@
 				indentWithTabs: false,
 				lineNumbers: true
 			});
-
+			
 			makeResizable(editor.display.wrapper);
 		
 			var button = new Element("button");
@@ -164,26 +164,26 @@
 		elements = elements.without.apply(elements, toRemove);
 	}
 
-  function watchElements() {
-    var i, textareas = $$("textarea.textarea.large");
+	function watchElements() {
+		var i, textareas = $$("textarea.textarea.large");
 
-    for (i = 0; i < textareas.length; i++) {
-      var textarea = textareas[i];
+		for (i = 0; i < textareas.length; i++) {
+			var textarea = textareas[i];
 
-      if (textarea._codemirror) {
-        continue;
-      }
+			if (textarea._codemirror) {
+				continue;
+			}
 
 			if (!textarea._watched) {
 				textarea._watched = true;
-			  elements.push(textarea);	
+				elements.push(textarea);	
 			}
-    }
-  }
+		}
+	}
 	
 	document.observe("dom:loaded", function() {
 		setTimeout(watchElements, 50);
-	  setInterval(watchElements, 500);
+		setInterval(watchElements, 500);
 		setInterval(watchVisible, 50);
 		
 		var previewPanel = $('preview_panel');
