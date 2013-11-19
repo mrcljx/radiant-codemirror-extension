@@ -68,12 +68,14 @@
 			
       element._codemirror = true; // don't retry
 			toRemove.push(element);
-      var editor = element._codemirror = CodeMirror.fromTextArea(element, {
-        mode: guessInitialMode(element),
-        theme: "xq-light",
-        tabSize: 2,
-        lineNumbers: true
-      });
+			var editor = element._codemirror = CodeMirror.fromTextArea(element, {
+				mode: guessInitialMode(element),
+				theme: "xq-light",
+				tabSize: 2,
+				indentUnit: 2,
+				indentWithTabs: false,
+				lineNumbers: true
+			});
 		
 			var button = new Element("button");
 			button.innerText = "Format selection";
