@@ -58,6 +58,49 @@
 		}
 	}
 	
+	function handleResizing(editorNode, handle) {
+		editorNode.movePosition = null;
+
+		function updateMovePosition(event) {
+			editorNode.movePosition = {
+				x:event.pointerX(),
+				y:event.pointerY()
+			};
+		}
+
+		function moveListener(event) {
+			var delta = {
+				x: event.pointerX() - editorNode.movePosition.x,
+				y: event.pointerY() - editorNode.movePosition.y
+			};
+
+			updateMovePosition(event);
+			var size = Element.getDimensions(editorNode);
+			editorNode.style.height = "" + Math.max(100, size.height + delta.y) + "px";
+		}
+
+		function upListener(event) {
+			Event.stopObserving(document.body, 'mousemove', moveListener);
+			var size = Element.getDimensions(editorNode);
+			editorNode.CodeMirror.setSize(size.width, size.height);
+		};
+
+		handle.observe('mousedown', function(event) {
+			 updateMovePosition(event);
+			 Event.observe(document.body, 'mouseup', upListener);
+			 Event.observe(document.body, 'mousemove', moveListener);
+		});
+	}
+
+	function makeResizable(editorNode) {
+		var resizer = new Element("div");
+		resizer.style.height = "5px";
+		resizer.style.backgroundColor = "#eee";
+		resizer.style.cursor = "ns-resize";
+		editorNode.insert({ after: resizer });
+		handleResizing(editorNode, resizer);
+	}
+
 	function watchVisible() {
 		var toRemove = [];
 		
@@ -76,6 +119,8 @@
 				indentWithTabs: false,
 				lineNumbers: true
 			});
+
+			makeResizable(editor.display.wrapper);
 		
 			var button = new Element("button");
 			button.innerText = "Format selection";
