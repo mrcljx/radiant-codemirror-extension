@@ -112,13 +112,27 @@
 			
 			element._codemirror = true; // don't retry
 			toRemove.push(element);
+			
+			var indentWith = "  ";
 			var editor = element._codemirror = CodeMirror.fromTextArea(element, {
 				mode: guessInitialMode(element),
 				theme: "xq-light",
-				tabSize: 2,
-				indentUnit: 2,
+				tabSize: indentWith.length,
+				indentUnit: indentWith.length,
 				indentWithTabs: false,
 				lineNumbers: true
+				extraKeys: {
+					'Tab': function(cm) {
+						if (cm.getSelection().length) {
+							CodeMirror.commands.indentMore(cm);
+						} else {
+							cm.replaceSelection(indentWith, "end");
+						}
+					},		 
+					'Shift-Tab': function (cm) {
+						CodeMirror.commands.indentLess(cm)
+					}
+				}
 			});
 			
 			makeResizable(editor.display.wrapper);
