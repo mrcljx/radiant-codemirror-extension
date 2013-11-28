@@ -120,7 +120,7 @@
 				tabSize: indentWith.length,
 				indentUnit: indentWith.length,
 				indentWithTabs: false,
-				lineNumbers: true
+				lineNumbers: true,
 				extraKeys: {
 					'Tab': function(cm) {
 						if (cm.getSelection().length) {
